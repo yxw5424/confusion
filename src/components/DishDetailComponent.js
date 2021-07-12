@@ -1,4 +1,4 @@
-import React  from 'react';
+import React ,{Component}from 'react';
 import { 
 	Card, 
 	CardImg, 
@@ -6,8 +6,11 @@ import {
 	CardBody,
     CardTitle,
 	Breadcrumb,
+	Button,
 	BreadcrumbItem } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import CommentForm from './CommentForm';
+
 
 
 	function RenderDish({dish}) {
@@ -24,7 +27,8 @@ import { Link } from 'react-router-dom';
 		)
 	}
 
-	function RenderComments({comments}){
+	function RenderComments({comments, toggleModal, isModalOpen}){
+
 		if (comments != null )
 		return(
 			<div className="col-12 col-md-5 m-1">
@@ -41,11 +45,36 @@ import { Link } from 'react-router-dom';
 					})
 				}
 				</ul>
+				<Button outline onClick={toggleModal}><span className="fa fa-pencil fa-lg"></span> Submit Comment</Button>
+				<CommentForm isModalOpen={isModalOpen} toggleModal={toggleModal}/>
 			</div>
 		)
 	}
 
-	const DishDetail = (props) =>{
+class DishDetail extends Component{
+	constructor(props){
+		super(props)
+			this.state={
+				isModalOpen:false
+			}
+			this.toggleModal=this.toggleModal.bind(this);
+			this.handleLogin = this.handleSubmit.bind(this);
+	}
+	toggleModal(){
+		this.setState({
+			isModalOpen:!this.state.isModalOpen
+		});
+
+	}
+	handleSubmit(event) {
+        this.toggleModal();
+        alert("Username: " + this.username.value + " Password: " + this.password.value
+            + " Remember: " + this.remember.checked);
+        event.preventDefault();
+
+    }
+
+	render(){
 		return(
 			<div className="container">
 				<div className="row">
@@ -57,22 +86,22 @@ import { Link } from 'react-router-dom';
                             <Link to="/menu">Menu</Link>
                         </BreadcrumbItem>
                         <BreadcrumbItem active>
-                            {props.dish.name}
+                            {this.props.dish.name}
                         </BreadcrumbItem>
                     </Breadcrumb>
                     <div className="col-12">
-                        <h3 align="left" >{props.dish.name}</h3>
+                        <h3 align="left" >{this.props.dish.name}</h3>
                         <hr/>
                     </div>
                 </div>
-				{props.dish === undefined ? <div></div> :
+				{this.props.dish === undefined ? <div></div> :
 					<div className="row">
-						<RenderDish dish={props.dish}/>
-						<RenderComments comments={props.comments}/>
+						<RenderDish dish={this.props.dish}/>
+						<RenderComments comments={this.props.comments} toggleModal={this.toggleModal} isModalOpen={this.state.isModalOpen}/>
 					</div>
 				}
 			</div>
 		)
 	}
-
+}
 export default DishDetail;
