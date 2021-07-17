@@ -21,9 +21,10 @@ class CommentForm extends Component {
 	}
 
 	handleSubmit(values) {
-        console.log('Current State is: ' + JSON.stringify(values));
-        alert('Current State is: ' + JSON.stringify(values));
-        // event.preventDefault();
+        console.log(this.props);
+        alert(this.props);
+		this.props.addComment(this.props.dishId, values.rating, values.author, values.comment)
+
     }
 
 	render(){
@@ -81,7 +82,7 @@ class CommentForm extends Component {
 						</Col>
 						<Col className="form-group">
 							<Col >
-								<Button type="submit" color="primary">
+								<Button type="submit" color="primary" onSubmit={this.handleSubmit, this.props.toggleModal}>
 								Submit
 								</Button>
 							</Col>
